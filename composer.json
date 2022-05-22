@@ -1,12 +1,11 @@
 {
-    "name": "shureban/laravel-prometheus",
-    "description": "Laravel SDK for working with prometheus metrics",
+    "name": "shureban/laravel-searcher",
+    "description": "Laravel SDK for working request searching in DB models",
     "keywords": [
-        "prometheus",
-        "metrics",
-        "graphana",
-        "counter",
-        "gauge",
+        "searcher",
+        "models",
+        "requests",
+        "search",
         "shureban"
     ],
     "type": "laravel-package",
@@ -19,15 +18,15 @@
         }
     ],
     "minimum-stability": "dev",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "autoload": {
         "psr-4": {
-            "Shureban\\LaravelPrometheus\\": "src/"
+            "Shureban\\LaravelSearcher\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Shureban\\LaravelPrometheus\\Tests\\": "tests/"
+            "Shureban\\LaravelSearcher\\Tests\\": "tests/"
         }
     },
     "require": {
@@ -38,7 +37,6 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Shureban\\LaravelPrometheus\\PrometheusServiceProvider"
             ],
             "aliases": {
             }
