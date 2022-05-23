@@ -27,7 +27,7 @@ class IsNull implements Filter
     public function apply(Builder $query, $value): Builder
     {
         return $value
-            ? $query->whereNull($this->fieldName)
-            : $query->whereNotNull($this->fieldName);
+            ? $query->whereNotNull($this->fieldName)
+            : $query->whereNull($this->fieldName);
     }
 }
