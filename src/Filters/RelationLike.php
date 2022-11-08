@@ -4,21 +4,8 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class RelationLike implements Filter
+class RelationLike extends RelationFilter
 {
-    private string $relation;
-    private string $fieldName;
-
-    /**
-     * @param string $relation
-     * @param string $fieldName
-     */
-    public function __construct(string $relation, string $fieldName)
-    {
-        $this->relation  = $relation;
-        $this->fieldName = $fieldName;
-    }
-
     /**
      * @inerhitDoc
      *
@@ -29,7 +16,8 @@ class RelationLike implements Filter
      */
     public function apply(Builder $query, $value): Builder
     {
-        $callback = fn(Builder $query) => $query->where($this->fieldName, 'ilike', "%{$value}%");
-        return $query->whereHas($this->relation, $callback);
+        $callback = fn(Builder $query) => $query->where($this->getFieldName(), 'ilike', "%{$value}%");
+
+        return $query->whereHas($this->getRelation(), $callback);
     }
 }

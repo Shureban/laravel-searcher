@@ -4,28 +4,18 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class Equal implements Filter
+class Equal extends Filter
 {
-    private string $fieldName;
-
-    /**
-     * @param string $fieldName
-     */
-    public function __construct(string $fieldName)
-    {
-        $this->fieldName = $fieldName;
-    }
-
     /**
      * @inerhitDoc
      *
      * @param Builder $query
-     * @param         $value
+     * @param mixed   $value
      *
      * @return Builder
      */
-    public function apply(Builder $query, $value): Builder
+    public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->where($this->fieldName, '=', $value);
+        return $query->where($this->getFieldName(), '=', $value);
     }
 }

@@ -4,12 +4,11 @@ namespace Shureban\LaravelSearcher;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Collection;
 use Shureban\LaravelSearcher\Enums\SortType;
-use Shureban\LaravelSearcher\Filters\Filter;
 
 abstract class Searcher
 {
@@ -40,7 +39,7 @@ abstract class Searcher
      * Key "name" will be using for getting request data ($request->get('name'))
      * Param "full_name" from Like filter, will be using to apply filter to column 'full_name' in query
      *
-     * @return Filter[]
+     * @return FilterInterface[]
      */
     abstract protected function getFilters(): array;
 
@@ -113,6 +112,14 @@ abstract class Searcher
      * @return Model[]|Collection
      */
     public function get(): Collection
+    {
+        return $this->paginate()->getCollection();
+    }
+
+    /**
+     * @return Model[]|Collection
+     */
+    public function all(): Collection
     {
         return $this->apply()->get();
     }

@@ -2,9 +2,10 @@
 
 namespace Shureban\LaravelSearcher\Filters;
 
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 
-class Like extends Filter
+class GtDate extends Filter
 {
     /**
      * @inerhitDoc
@@ -16,6 +17,6 @@ class Like extends Filter
      */
     public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->where($this->getFieldName(), 'ilike', "%{$value}%");
+        return $query->where(DB::raw("{$this->getFieldName()}::date"), '>', $value);
     }
 }

@@ -3,34 +3,27 @@
 namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Shureban\LaravelSearcher\Exceptions\RangeIsIncompleteException;
 
-class RelationBetween implements Filter
+class RelationBetween extends RelationFilter
 {
-    private string $relation;
-    private string $fieldName;
-
-    /**
-     * @param string $relation
-     * @param string $fieldName
-     */
-    public function __construct(string $relation, string $fieldName)
-    {
-        $this->relation  = $relation;
-        $this->fieldName = $fieldName;
-    }
-
     /**
      * @inerhitDoc
      *
      * @param Builder $query
-     * @param         $value
+     * @param mixed   $value
      *
      * @return Builder
+     * @throws RangeIsIncompleteException
      */
-    public function apply(Builder $query, $value): Builder
+    public function apply(Builder $query, mixed $value): Builder
     {
-        $callback = fn(Builder $query) => $query->whereBetween($this->fieldName, array_values($value));
+        if (count($value) !== 2) {
+            throw new RangeIsIncompleteException();
+        }
 
-        return $query->whereHas($this->relation, $callback);
+        $callback = fn(Builder $query) => $query->whereBetween($this->getFieldName(), array_values($value));
+
+        return $query->whereHas($this->getRelation(), $callback);
     }
 }
