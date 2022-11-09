@@ -1,6 +1,6 @@
 {
     "name": "shureban/laravel-searcher",
-    "description": "Laravel SDK for working request searching in DB models",
+    "description": "Laravel SDK for searching data in DB using requests",
     "keywords": [
         "searcher",
         "models",
@@ -32,16 +32,12 @@
     "require": {
         "php": "^8.0"
     },
+    "prefer-stable": true,
     "extra": {
         "laravel": {
             "providers": [
                 "Shureban\\LaravelSearcher\\SearcherServiceProvider"
-            ],
-            "aliases": {
-            }
-        },
-        "branch-alias": {
-            "dev-master": "1.x-dev"
+            ]
         }
     }
 }
