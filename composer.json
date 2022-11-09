@@ -18,7 +18,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "autoload": {
         "psr-4": {
             "Shureban\\LaravelSearcher\\": "src/"
@@ -35,6 +35,7 @@
     "extra": {
         "laravel": {
             "providers": [
+                "Shureban\\LaravelSearcher\\SearcherServiceProvider"
             ],
             "aliases": {
             }
