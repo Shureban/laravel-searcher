@@ -4,31 +4,20 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class RelationIn implements Filter
+class RelationIn extends RelationFilter
 {
-    private string $relation;
-    private string $fieldName;
-
-    /**
-     * @param string $relation
-     * @param string $fieldName
-     */
-    public function __construct(string $relation, string $fieldName)
-    {
-        $this->relation  = $relation;
-        $this->fieldName = $fieldName;
-    }
-
     /**
      * @inerhitDoc
      *
      * @param Builder $query
-     * @param         $value
+     * @param mixed   $value
      *
      * @return Builder
      */
-    public function apply(Builder $query, $value): Builder
+    public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->whereHas($this->relation, fn(Builder $query) => $query->whereIn($this->fieldName, $value));
+        $callback = fn(Builder $query) => $query->whereIn($this->getFieldName(), $value);
+
+        return $query->whereHas($this->getRelation(), $callback);
     }
 }

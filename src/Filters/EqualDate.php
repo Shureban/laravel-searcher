@@ -2,31 +2,31 @@
 
 namespace Shureban\LaravelSearcher\Filters;
 
+use DateTime;
 use DB;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
+use Shureban\LaravelSearcher\Exceptions\WrongDateTimeFormatException;
 
-class EqualDate implements Filter
+class EqualDate extends Filter
 {
-    private string $fieldName;
-
-    /**
-     * @param string $fieldName
-     */
-    public function __construct(string $fieldName)
-    {
-        $this->fieldName = $fieldName;
-    }
-
     /**
      * @inerhitDoc
      *
      * @param Builder $query
-     * @param         $value
+     * @param mixed   $value
      *
      * @return Builder
+     * @throws WrongDateTimeFormatException
      */
-    public function apply(Builder $query, $value): Builder
+    public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->where(DB::raw("{$this->fieldName}::date"), '=', $value);
+        try {
+            $date = new DateTime($value);
+        } catch (Exception) {
+            throw new WrongDateTimeFormatException();
+        }
+
+        return $query->where(DB::raw("{$this->getFieldName()}::date"), '=', $date);
     }
 }

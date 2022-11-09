@@ -3,31 +3,29 @@
 namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
+use Shureban\LaravelSearcher\Exceptions\RangeIsIncompleteException;
 
-class BetweenRange implements Filter
+class BetweenRange extends Filter
 {
-    private string $fieldName;
-
-    /**
-     * @param string $fieldName
-     */
-    public function __construct(string $fieldName)
-    {
-        $this->fieldName = $fieldName;
-    }
-
     /**
      * @inerhitDoc
      *
      * @param Builder $query
-     * @param         $value
+     * @param mixed   $value
      *
      * @return Builder
+     * @throws RangeIsIncompleteException
      */
-    public function apply(Builder $query, $value): Builder
+    public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->where(function (Builder $query) use ($value) {
-            return $query->whereBetween($this->fieldName, [$value['min'], $value['max']])->orWhereNull($this->fieldName);
-        });
+        if (count($value) < 2) {
+            throw new RangeIsIncompleteException();
+        }
+
+        $min = current($value);
+        next($value);
+        $max = current($value);
+
+        return $query->whereBetween($this->getFieldName(), [$min, $max]);
     }
 }

@@ -2,17 +2,25 @@
 
 namespace Shureban\LaravelSearcher\Filters;
 
-use Illuminate\Database\Eloquent\Builder;
+use Shureban\LaravelSearcher\FilterInterface;
 
-interface Filter
+abstract class Filter implements FilterInterface
 {
+    private string $fieldName;
+
     /**
-     * Apply filter to query
-     *
-     * @param Builder $query
-     * @param mixed   $value
-     *
-     * @return Builder
+     * @param string $fieldName
      */
-    public function apply(Builder $query, mixed $value): Builder;
+    public function __construct(string $fieldName)
+    {
+        $this->fieldName = $fieldName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFieldName(): string
+    {
+        return $this->fieldName;
+    }
 }

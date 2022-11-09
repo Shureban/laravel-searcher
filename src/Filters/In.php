@@ -4,28 +4,18 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class In implements Filter
+class In extends Filter
 {
-    private string $fieldName;
-
-    /**
-     * @param string $fieldName
-     */
-    public function __construct(string $fieldName)
-    {
-        $this->fieldName = $fieldName;
-    }
-
     /**
      * @inerhitDoc
      *
      * @param Builder $query
-     * @param         $value
+     * @param mixed   $value
      *
      * @return Builder
      */
-    public function apply(Builder $query, $value): Builder
+    public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->whereIn($this->fieldName, $value);
+        return $query->whereIn($this->getFieldName(), $value);
     }
 }
