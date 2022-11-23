@@ -28,17 +28,20 @@ By default, place your searchers in app\Http\Searchers folder.
 
 #### getQuery method
 
-Should return query for applying filters. You may modify that query `Model::query()->with(['relation_1', 'relation_2' => fn() => ...])`
+Should return query for applying filters. You may modify that
+query `Model::query()->with(['relation_1', 'relation_2' => fn() => ...])`
 
 #### getFilters method
 
 Should return associative array where:
+
 - keys must be equal to your request params
 - values must be objects related of `\Shureban\LaravelSearcher\Searcher`
 
 #### Example
 
 In that case:
+
 - 'age' - is request parameter age
 - 'client_age' - is DB column name
 - new Between(...) - filter rule
@@ -95,9 +98,32 @@ class YourFirstSearcher extends Searcher
 }
 ```
 
-### Real case
+### How to change Sorting
 
-#### Your first searcher
+For change default sort column, you should override method `sortColumn`.
+
+```php
+protected function sortColumn(): ?string
+{
+    return $this->request->get('sort_column', 'created_at');
+}
+```
+
+If you need to change order behavior related with some column, do this. Override method `applySortBy`
+
+```php
+protected function applySortBy(Builder $query, string $sortColumn, SortType $sortType): Builder
+{
+    return match ($sortColumn) {
+        'your_special_column'   => $query->orderBy('column_1', $sortType)->orderBy('column_2', $sortType),
+        default                 => parent::applySortBy($query, $sortColumn, $sortType),
+    };
+}
+```
+
+## Real case
+
+### Your first searcher
 
 ```php
 namespace App\Http\Searchers;
@@ -128,7 +154,7 @@ class YourFirstSearcher extends Searcher
 }
 ```
 
-#### Request
+### Request
 
 ```php
 namespace App\Http\Requests;
@@ -156,7 +182,7 @@ class YourRequest extends FormRequest
 }
 ```
 
-#### Controller
+### Controller
 
 ```php
 namespace App\Http\Controllers;
