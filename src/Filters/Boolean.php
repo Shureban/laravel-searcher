@@ -4,7 +4,7 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class Gte extends ColumnFilter
+class Boolean extends ColumnFilter
 {
     /**
      * @inerhitDoc
@@ -16,6 +16,6 @@ class Gte extends ColumnFilter
      */
     public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->where($this->getColumnName(), '>=', $value);
+        return $query->where($this->getColumnName(), '=', (bool)$value);
     }
 }

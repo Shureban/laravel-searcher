@@ -5,7 +5,7 @@ namespace Shureban\LaravelSearcher\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Shureban\LaravelSearcher\Exceptions\RangeIsIncompleteException;
 
-class Between extends Filter
+class Between extends ColumnFilter
 {
     /**
      * @inerhitDoc
@@ -22,6 +22,6 @@ class Between extends Filter
             throw new RangeIsIncompleteException();
         }
 
-        return $query->whereBetween($this->getFieldName(), array_values($value));
+        return $query->whereBetween($this->getColumnName(), array_values($value));
     }
 }

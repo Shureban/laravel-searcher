@@ -4,7 +4,7 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class RelationIn extends RelationFilter
+class RelationIn extends RelationColumnFilter
 {
     /**
      * @inerhitDoc
@@ -16,7 +16,7 @@ class RelationIn extends RelationFilter
      */
     public function apply(Builder $query, mixed $value): Builder
     {
-        $callback = fn(Builder $query) => $query->whereIn($this->getFieldName(), $value);
+        $callback = fn(Builder $query) => $query->whereIn($this->getColumnName(), $value);
 
         return $query->whereHas($this->getRelation(), $callback);
     }
