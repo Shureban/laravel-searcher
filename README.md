@@ -87,14 +87,14 @@ class YourFirstSearcher extends Searcher
             'partner_statuses' => new NotIn('partner_status'),  // array
             'only_every_even'  => new Callback(fn(Builder $query, mixed $value) => $query->whereRaw('(id % 2 = 0)')),
 
-            // Working with relations
-            'invoice_payouts'          => new RelationBetween('invoices', 'amount'),        // number
-            'invoice_statuses'         => new RelationIn('invoices', 'status'),             // array
-            'invoice_payment_method'   => new RelationLike('invoices', 'payment_method'),   // any
-            'invoice_process_statuses' => new RelationNotIn('invoices', 'process_status'),  // array
 
             // Modifier used. That case means, all rows where manager_id is equal to same value or null
             'manager_id' => new OrNull(new Like('manager_id')),
+            // Working with relation modifier
+            'invoice_payouts'          => new Relation('invoices', new Between('amount')),        // number
+            'invoice_statuses'         => new Relation('invoices', new In('status')),             // array
+            'invoice_payment_method'   => new Relation('invoices', new Like('payment_method')),   // any
+            'invoice_process_statuses' => new Relation('invoices', new NotIn('process_status')),  // array
         ];
     }
 }
