@@ -4,7 +4,7 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class NotIn extends Filter
+class NotIn extends ColumnFilter
 {
     /**
      * @inerhitDoc
@@ -16,6 +16,6 @@ class NotIn extends Filter
      */
     public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->whereNotIn($this->getFieldName(), $value);
+        return $query->whereNotIn($this->getColumnName(), $value);
     }
 }

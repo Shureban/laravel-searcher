@@ -4,7 +4,7 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class Lte extends Filter
+class Lte extends ColumnFilter
 {
     /**
      * @inerhitDoc
@@ -16,6 +16,6 @@ class Lte extends Filter
      */
     public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->where($this->getFieldName(), '<=', $value);
+        return $query->where($this->getColumnName(), '<=', $value);
     }
 }

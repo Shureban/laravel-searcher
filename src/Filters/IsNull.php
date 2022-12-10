@@ -4,7 +4,7 @@ namespace Shureban\LaravelSearcher\Filters;
 
 use Illuminate\Database\Eloquent\Builder;
 
-class IsNull extends Filter
+class IsNull extends ColumnFilter
 {
     /**
      * @inerhitDoc
@@ -16,8 +16,6 @@ class IsNull extends Filter
      */
     public function apply(Builder $query, mixed $value): Builder
     {
-        return $value
-            ? $query->whereNotNull($this->getFieldName())
-            : $query->whereNull($this->getFieldName());
+        return $value ? $query->whereNotNull($this->getColumnName()) : $query->whereNull($this->getColumnName());
     }
 }

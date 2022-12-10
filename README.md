@@ -14,7 +14,7 @@ Add the following class to the `providers` array in `config/app.php`:
 Shureban\LaravelSearcher\SearcherServiceProvider::class,
 ```
 
-You can also publish the config file to change implementations (ie. interface to specific class).
+You can also publish the config file to change implementations (i.e. interface to specific class).
 
 ```shell
 php artisan vendor:publish --provider="Shureban\LaravelSearcher\SearcherServiceProvider"
@@ -62,12 +62,13 @@ class YourFirstSearcher extends Searcher
     }
 
     /**
-     * @return Filter[]
+     * @return ColumnFilter[]
      */
     protected function getFilters(): array
     {
         return [
             // Simple cases
+            'is_single'        => new Boolean('is_single'),     // bool
             'age'              => new Between('client_age'),    // number
             'salary'           => new BetweenRange('salary'),   // number
             'id'               => new Equal('id'),              // any
@@ -84,15 +85,16 @@ class YourFirstSearcher extends Searcher
             'birthday'         => new LtDate('birthday'),       // date
             'hired_at'         => new LteDate('hired_at'),      // date
             'partner_statuses' => new NotIn('partner_status'),  // array
-
-            // Modifier used. That case means, all rows where manager_id is equal to same value or null
-            'manager_id' => new OrNull(new Like('manager_id')), // any
+            'only_every_even'  => new Callback(fn(Builder $query, mixed $value) => $query->whereRaw('(id % 2 = 0)')),
 
             // Working with relations
             'invoice_payouts'          => new RelationBetween('invoices', 'amount'),        // number
             'invoice_statuses'         => new RelationIn('invoices', 'status'),             // array
             'invoice_payment_method'   => new RelationLike('invoices', 'payment_method'),   // any
             'invoice_process_statuses' => new RelationNotIn('invoices', 'process_status'),  // array
+
+            // Modifier used. That case means, all rows where manager_id is equal to same value or null
+            'manager_id' => new OrNull(new Like('manager_id')),
         ];
     }
 }
@@ -143,7 +145,7 @@ class YourFirstSearcher extends Searcher
     }
 
     /**
-     * @return Filter[]
+     * @return ColumnFilter[]
      */
     protected function getFilters(): array
     {

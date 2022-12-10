@@ -4,16 +4,16 @@ namespace Shureban\LaravelSearcher\Modifiers;
 
 use Illuminate\Database\Eloquent\Builder;
 use Shureban\LaravelSearcher\FilterInterface;
-use Shureban\LaravelSearcher\Filters\Filter;
+use Shureban\LaravelSearcher\Filters\ColumnFilter;
 
 class OrNull implements FilterInterface
 {
-    private Filter $filter;
+    private ColumnFilter $filter;
 
     /**
-     * @param Filter $filter
+     * @param ColumnFilter $filter
      */
-    public function __construct(Filter $filter)
+    public function __construct(ColumnFilter $filter)
     {
         $this->filter = $filter;
     }
@@ -29,7 +29,7 @@ class OrNull implements FilterInterface
     public function apply(Builder $query, mixed $value): Builder
     {
         return $query->where(function (Builder $query) use ($value) {
-            return $this->filter->apply($query, $value)->orWhereNull($this->filter->getFieldName());
+            return $this->filter->apply($query, $value)->orWhereNull($this->filter->getColumnName());
         });
     }
 }

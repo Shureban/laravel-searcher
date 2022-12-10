@@ -5,7 +5,7 @@ namespace Shureban\LaravelSearcher\Filters;
 use Illuminate\Database\Eloquent\Builder;
 use Shureban\LaravelSearcher\Exceptions\RangeIsIncompleteException;
 
-class RelationBetween extends RelationFilter
+class RelationBetween extends RelationColumnFilter
 {
     /**
      * @inerhitDoc
@@ -22,7 +22,7 @@ class RelationBetween extends RelationFilter
             throw new RangeIsIncompleteException();
         }
 
-        $callback = fn(Builder $query) => $query->whereBetween($this->getFieldName(), array_values($value));
+        $callback = fn(Builder $query) => $query->whereBetween($this->getColumnName(), array_values($value));
 
         return $query->whereHas($this->getRelation(), $callback);
     }

@@ -5,7 +5,7 @@ namespace Shureban\LaravelSearcher\Filters;
 use DB;
 use Illuminate\Database\Eloquent\Builder;
 
-class GteDate extends Filter
+class GteDate extends ColumnFilter
 {
     /**
      * @inerhitDoc
@@ -17,6 +17,6 @@ class GteDate extends Filter
      */
     public function apply(Builder $query, mixed $value): Builder
     {
-        return $query->where(DB::raw("{$this->getFieldName()}::date"), '>=', $value);
+        return $query->where(DB::raw("{$this->getColumnName()}::date"), '>=', $value);
     }
 }

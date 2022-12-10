@@ -2,19 +2,19 @@
 
 namespace Shureban\LaravelSearcher\Filters;
 
-abstract class RelationFilter extends Filter
+abstract class RelationColumnFilter extends ColumnFilter
 {
     private string $relation;
 
     /**
      * @param string $relation
-     * @param string $fieldName
+     * @param string $columnName
      */
-    public function __construct(string $relation, string $fieldName)
+    public function __construct(string $relation, string $columnName)
     {
-        parent::__construct($fieldName);
+        parent::__construct($columnName);
 
-        $this->relation  = $relation;
+        $this->relation = $relation;
     }
 
     /**

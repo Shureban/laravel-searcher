@@ -8,7 +8,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Shureban\LaravelSearcher\Exceptions\WrongDateTimeFormatException;
 
-class LteDate extends Filter
+class LteDate extends ColumnFilter
 {
     /**
      * @inerhitDoc
@@ -23,10 +23,11 @@ class LteDate extends Filter
     {
         try {
             $date = new DateTime($value);
-        } catch (Exception) {
+        }
+        catch (Exception) {
             throw new WrongDateTimeFormatException();
         }
 
-        return $query->where(DB::raw("{$this->getFieldName()}::date"), '<=', $date);
+        return $query->where(DB::raw("{$this->getColumnName()}::date"), '<=', $date);
     }
 }
