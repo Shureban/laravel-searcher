@@ -23,6 +23,32 @@ abstract class Searcher
     }
 
     /**
+     * @return LengthAwarePaginator|Paginator
+     */
+    public function paginate(): LengthAwarePaginator|Paginator
+    {
+        $perPage = $this->request->get('per_page', $this->perPage());
+
+        return $this->apply()->paginate($perPage);
+    }
+
+    /**
+     * @return Model[]|Collection
+     */
+    public function get(): Collection
+    {
+        return $this->paginate()->getCollection();
+    }
+
+    /**
+     * @return Model[]|Collection
+     */
+    public function all(): Collection
+    {
+        return $this->apply()->get();
+    }
+
+    /**
      * Return query, witch need to apply filter
      *
      * @return Builder
@@ -42,25 +68,6 @@ abstract class Searcher
      * @return FilterInterface[]
      */
     abstract protected function getFilters(): array;
-
-    /**
-     * @return Builder
-     */
-    private function apply(): Builder
-    {
-        $query = $this->getQuery();
-
-        foreach ($this->getFilters() as $requestKey => $filter) {
-            if ($this->request->has($requestKey)) {
-                $filter->apply($query, $this->request->get($requestKey));
-            }
-        }
-
-        $sortColumn = $this->sortColumn() ?? config('searcher.sort_column');
-        $sortType   = $this->sortType() ?? config('searcher.sort_type');
-
-        return $this->applySortBy($query, $sortColumn, $sortType);
-    }
 
     /**
      * @return string|null
@@ -99,28 +106,33 @@ abstract class Searcher
     }
 
     /**
-     * @return LengthAwarePaginator|Paginator
+     * @return bool
      */
-    public function paginate(): LengthAwarePaginator|Paginator
+    protected function skipEmptyValues(): bool
     {
-        $perPage = $this->request->get('per_page', $this->perPage());
-
-        return $this->apply()->paginate($perPage);
+        return config('searcher.skip_empty_values');
     }
 
     /**
-     * @return Model[]|Collection
+     * @return Builder
      */
-    public function get(): Collection
+    private function apply(): Builder
     {
-        return $this->paginate()->getCollection();
-    }
+        $query = $this->getQuery();
 
-    /**
-     * @return Model[]|Collection
-     */
-    public function all(): Collection
-    {
-        return $this->apply()->get();
+        foreach ($this->getFilters() as $requestKey => $filter) {
+            $hasValue       = $this->request->has($requestKey);
+            $isEmpty        = empty($this->request->get($requestKey));
+            $itMightBeEmpty = $this->skipEmptyValues() === false;
+
+            if ($hasValue && (!$isEmpty || $itMightBeEmpty)) {
+                $filter->apply($query, $this->request->get($requestKey));
+            }
+        }
+
+        $sortColumn = $this->sortColumn() ?? config('searcher.sort_column');
+        $sortType   = $this->sortType() ?? config('searcher.sort_type');
+
+        return $this->applySortBy($query, $sortColumn, $sortType);
     }
 }

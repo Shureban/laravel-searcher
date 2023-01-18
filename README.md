@@ -67,10 +67,12 @@ class YourFirstSearcher extends Searcher
     protected function getFilters(): array
     {
         return [
+          //| Request param name | Filter object               | Expected value type
+          //--------------------------------------------------------------
             // Simple cases
             'is_single'        => new Boolean('is_single'),     // bool
-            'age'              => new Between('client_age'),    // number
-            'salary'           => new BetweenRange('salary'),   // number
+            'age'              => new Between('client_age'),    // array (2 elements)
+            'salary'           => new BetweenRange('salary'),   // array (2 elements)
             'id'               => new Equal('id'),              // any
             'created_at'       => new EqualDate('created_at'),  // date
             'height'           => new Gt('height'),             // number
@@ -79,22 +81,26 @@ class YourFirstSearcher extends Searcher
             'deleted_at'       => new GteDate('deleted_at'),    // date
             'statuses'         => new In('status'),             // array
             'image_id'         => new IsNull('image_id'),       // bool
-            'email'            => new Like('email'),            // any
+            'email'            => new Like('email'),            // mixed
             'foot_size'        => new Lt('foot_size'),          // number
             'max_foot_size'    => new Lte('max_foot_size'),     // number
             'birthday'         => new LtDate('birthday'),       // date
             'hired_at'         => new LteDate('hired_at'),      // date
             'partner_statuses' => new NotIn('partner_status'),  // array
-            'only_every_even'  => new Callback(fn(Builder $query, mixed $value) => $query->whereRaw('(id % 2 = 0)')),
+            'only_every_even'  => new Callback(
+                fn(Builder $query, mixed $value) => $query->whereRaw('(id % 2 = 0)')
+            ),                                                  // mixed
 
 
             // Modifier used. That case means, all rows where manager_id is equal to same value or null
             'manager_id' => new OrNull(new Like('manager_id')),
-            // Working with relation modifier
-            'invoice_payouts'          => new Relation('invoices', new Between('amount')),        // number
-            'invoice_statuses'         => new Relation('invoices', new In('status')),             // array
-            'invoice_payment_method'   => new Relation('invoices', new Like('payment_method')),   // any
-            'invoice_process_statuses' => new Relation('invoices', new NotIn('process_status')),  // array
+            'full_name'  => new OrEmpty(new Like('full_name')),
+            'owner_id'   => new MultipleOr(new Equal('user_id'), new Like('manager_id'), new Relation('brokers', new Equal('id'))),
+            // Working with relation modifiers
+            'invoice_payouts'          => new Relation('invoices', new Between('amount')),
+            'invoice_statuses'         => new Relation('invoices', new In('status')),
+            'invoice_payment_method'   => new Relation('invoices', new Like('payment_method')),
+            'invoice_process_statuses' => new Relation('invoices', new NotIn('process_status')),
         ];
     }
 }
