@@ -25,6 +25,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Should skip empty fields
+    |--------------------------------------------------------------------------
+    |
+    | Sometimes we get empty values, and we should have opportunity to skip them.
+    | If value is true, all empty values will be filtered.
+    |
+    */
+
+    'skip_empty_values' => true,
+
+    /*
+    |--------------------------------------------------------------------------
     | Default sort type
     |--------------------------------------------------------------------------
     |

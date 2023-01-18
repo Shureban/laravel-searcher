@@ -4,20 +4,19 @@ namespace Shureban\LaravelSearcher\Modifiers;
 
 use Illuminate\Database\Eloquent\Builder;
 use Shureban\LaravelSearcher\FilterInterface;
-use Shureban\LaravelSearcher\Filters\ColumnFilter;
 
 class Relation implements FilterInterface
 {
-    private ColumnFilter $filter;
-    private string       $relation;
-    private bool         $has;
+    private FilterInterface $filter;
+    private string          $relation;
+    private bool            $has;
 
     /**
-     * @param string       $relation
-     * @param ColumnFilter $filter
-     * @param bool         $has
+     * @param string          $relation
+     * @param FilterInterface $filter
+     * @param bool            $has
      */
-    public function __construct(string $relation, ColumnFilter $filter, bool $has = true)
+    public function __construct(string $relation, FilterInterface $filter, bool $has = true)
     {
         $this->filter   = $filter;
         $this->relation = $relation;
