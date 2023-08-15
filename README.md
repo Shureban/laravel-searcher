@@ -68,11 +68,12 @@ class YourFirstSearcher extends Searcher
     {
         return [
           //| Request param name | Filter object               | Expected value type
-          //--------------------------------------------------------------
+          //-------------------------------------------------------------------------
             // Simple cases
             'is_single'        => new Boolean('is_single'),     // bool
             'age'              => new Between('client_age'),    // array (2 elements)
             'salary'           => new BetweenRange('salary'),   // array (2 elements)
+            'birthday'         => new BetweenDates('birthday'), // array (2 elements)
             'id'               => new Equal('id'),              // any
             'created_at'       => new EqualDate('created_at'),  // date
             'height'           => new Gt('height'),             // number
