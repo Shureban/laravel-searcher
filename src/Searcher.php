@@ -12,7 +12,7 @@ use Shureban\LaravelSearcher\Enums\SortType;
 
 abstract class Searcher
 {
-    private FormRequest $request;
+    protected FormRequest $request;
 
     /**
      * @param FormRequest $request
@@ -27,7 +27,7 @@ abstract class Searcher
      */
     public function paginate(): LengthAwarePaginator|Paginator
     {
-        $perPage = $this->request->get('per_page', $this->perPage());
+        $perPage = $this->request->get(config('searcher.per_page_field_name'), $this->perPage());
 
         return $this->apply()->paginate($perPage);
     }
@@ -74,7 +74,7 @@ abstract class Searcher
      */
     protected function sortColumn(): ?string
     {
-        return $this->request->get('sort_column');
+        return data_get($this->request->all(), config('searcher.sort_column_field_name'));
     }
 
     /**
@@ -82,7 +82,9 @@ abstract class Searcher
      */
     protected function sortType(): ?SortType
     {
-        return SortType::tryFrom($this->request->get('sort_type'));
+        $sortType = data_get($this->request->all(), config('searcher.sort_type_field_name'));
+
+        return SortType::tryFrom($sortType);
     }
 
     /**
@@ -102,7 +104,7 @@ abstract class Searcher
      */
     protected function perPage(): int
     {
-        return config('searcher.per_page');
+        return config('searcher.per_page_value');
     }
 
     /**
@@ -130,8 +132,8 @@ abstract class Searcher
             }
         }
 
-        $sortColumn = $this->sortColumn() ?? config('searcher.sort_column');
-        $sortType   = $this->sortType() ?? config('searcher.sort_type');
+        $sortColumn = $this->sortColumn() ?? config('searcher.sort_column_name');
+        $sortType   = $this->sortType() ?? config('searcher.sort_type_value');
 
         return $this->applySortBy($query, $sortColumn, $sortType);
     }
