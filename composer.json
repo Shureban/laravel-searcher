@@ -18,7 +18,7 @@
         }
     ],
     "minimum-stability": "dev",
-    "version": "2.4.0",
+    "version": "2.4.1",
     "autoload": {
         "psr-4": {
             "Shureban\\LaravelSearcher\\": "src/"
