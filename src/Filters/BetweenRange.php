@@ -26,6 +26,10 @@ class BetweenRange extends ColumnFilter
         next($value);
         $max = current($value);
 
+        if ($min > $max) {
+            [$min, $max] = [$max, $min];
+        }
+
         return $query->whereBetween($this->getColumnName(), [$min, $max]);
     }
 }

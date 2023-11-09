@@ -39,6 +39,10 @@ class BetweenDates extends ColumnFilter
         next($value);
         $endDate = current($value);
 
+        if ($startDate > $endDate) {
+            [$startDate, $endDate] = [$endDate, $startDate];
+        }
+
         if ($this->strict) {
             return $query->where(function (Builder $query) use ($endDate, $startDate) {
                 (new GteDate($this->getColumnName()))->apply($query, $startDate);
