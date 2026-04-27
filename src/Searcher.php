@@ -96,7 +96,9 @@ abstract class Searcher
      */
     protected function applySortBy(Builder $query, string $sortColumn, SortType $sortType): Builder
     {
-        return $query->orderByRaw(sprintf('(%s) %s NULLS LAST', $sortColumn, $sortType->value));
+        $wrapped = $query->getQuery()->getGrammar()->wrap($sortColumn);
+
+        return $query->orderByRaw(sprintf('(%s) %s NULLS LAST', $wrapped, $sortType->value));
     }
 
     /**
